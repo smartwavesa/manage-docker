@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#bash build-publish.sh sudo "--build-arg GIT_REPO=https://USERNAME:PASSWORD@smartwave.git.beanstalkapp.com/sw_website.git --no-cache=true --pull=true" "648292630089.dkr.ecr.eu-west-1.amazonaws.com/sw_website" . AWS_CREDENTIALS
-
-#bash build-publish.sh sudo   "648292630089.dkr.ecr.eu-west-1.amazonaws.com/sw_artifactory" . AWS_CREDENTIALS
-
 set -e
 
 usage="Usage:	build-image  -s  -o docker_build_opt  -n docker_build_name -l docker_build_location \n
@@ -44,12 +40,10 @@ $2 \n" 1>&2
 }
 
 
-
 if [ -z $docker_build_name ]
 	then
 	error_exit "\"docker_build_name\" is mandatory."
 fi
-
 
 
 docker_build_cmd="$sudo docker build $docker_build_opt -t $docker_build_name $docker_build_location"
