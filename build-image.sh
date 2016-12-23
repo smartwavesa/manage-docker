@@ -48,6 +48,8 @@ fi
 
 docker_build_cmd="$sudo docker build $docker_build_opt -t $docker_build_name $docker_build_location"
 
+echo $docker_build_cmd
+
 
 eval $docker_build_cmd
 
