@@ -2,13 +2,19 @@
 
 set -e
 
-usage="Usage:	push-image-ecr  -a  aws_credentials \n
--c aws_credentials : to execute docker build with sudo \n"
+usage="Usage:	push-image-ecr  -s -a aws_credentials -t tag\n
+-s : to execute docker build with sudo \
+-a aws_credentials : to execute docker build with sudo \n
+-t tag  (mandatory) : the image's tag \n"
 
+sudo=""
+tag=""
 
-while getopts 'a:' opt; do
+while getopts 'sa:t:' opt; do
     case $opt in
         a)  aws_credentials_arg="$OPTARG" ;;
+		s)  sudo="sudo" ;;
+        t)  tag="$OPTARG"    ;;
         *)  exit 1            ;;
     esac
 done
@@ -34,11 +40,10 @@ eval aws_credentials=\$$aws_credentials_arg
 AWS_ACCESS_KEY_ID=${aws_credentials%:*}
 AWS_SECRET_ACCESS_KEY=${aws_credentials#*:}
 
-ecr_get_login="$1 docker run --rm  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=eu-west-1 anigeo/awscli ecr get-login"
+ecr_get_login="$sudo docker run --rm  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=eu-west-1 anigeo/awscli ecr get-login"
 
 $1 `$ecr_get_login`
 
-eval "$1 docker push $4"
-
+eval "$sudo docker push $tag"
 
 exit 0
