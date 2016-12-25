@@ -42,7 +42,7 @@ if [ -z $image_name ]
 	error_exit "\"image_name\" is mandatory."
 fi
 
-if [ -z $aws_credentials ]
+if [ -z $aws_credentials_arg ]
 	then
 	error_exit "\"aws_credentials\" is mandatory."
 fi
