@@ -2,9 +2,9 @@
 
 set -e
 
-usage="Usage:	tag-image  -s -n image-name -t tag\n
+usage="Usage:	tag-image  -s -n image_name -t tag\n
 -s : to execute docker build with sudo \n
--n image-name  (mandatory) : the image's name \n
+-n image_name  (mandatory) : the image's name \n
 -t tag  (mandatory) : the image's tag \n"
 
 sudo=""
@@ -12,7 +12,7 @@ tag=""
 
 while getopts 'sn:t:' opt; do
     case $opt in
-        a)  image-name="$OPTARG" ;;
+        a)  image_name="$OPTARG" ;;
 		s)  sudo="sudo" ;;
         t)  tag="$OPTARG"    ;;
         *)  exit 1            ;;
@@ -34,9 +34,9 @@ $2 \n" 1>&2
 	exit 1
 }
 
-if [ -z $image-name ]
+if [ -z $image_name ]
 	then
-	error_exit "\"image-name\" is mandatory."
+	error_exit "\"image_name\" is mandatory."
 fi
 
 if [ -z $tag ]
@@ -44,6 +44,6 @@ if [ -z $tag ]
 	error_exit "\"tag\" is mandatory."
 fi
 
-eval "$sudo docker tag $image-name $tag"
+eval "$sudo docker tag $image_name $tag"
 
 exit 0

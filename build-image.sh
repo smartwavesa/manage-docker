@@ -2,28 +2,11 @@
 
 set -e
 
-usage="Usage:	build-image  -s  -o build-opt  -n image-name -l dockerfile-location \n
+usage="Usage:	build-image  -s  -o build_opt  -n image_name -l dockerfile_location \n
 -s : to execute docker build with sudo \n
--o build-opt : all the docker options except the image name /tag \n
--n image-name  (mandatory) : the image's name \n
--l dockerfile-location : the location of the Dockerfile \n"
-
-
-build-opt=""
-image-name=""
-dockerfile-location="."
-sudo=""
-
-while getopts 'so:n:l:' opt; do
-    case $opt in
-        o)  build-opt="$OPTARG" ;;
-        n)  image-name="$OPTARG"    ;;
-		l)  dockerfile-location="$OPTARG"    ;;
-		s)  sudo="sudo" ;;
-        *)  exit 1            ;;
-    esac
-done
-
+-o build_opt : all the docker options except the image name /tag \n
+-n image_name  (mandatory) : the image's name \n
+-l dockerfile_location : the location of the Dockerfile \n"
 
 function help
 {
@@ -39,17 +22,28 @@ $2 \n" 1>&2
 	exit 1
 }
 
+build_opt=""
+image_name=""
+dockerfile_location="."
+sudo=""
 
-if [ -z $image-name ]
+while getopts 'so:n:l:' opt; do
+    case $opt in
+        o)  build_opt="$OPTARG" ;;
+        n)  image_name="$OPTARG"    ;;
+		l)  dockerfile_location="$OPTARG"    ;;
+		s)  sudo="sudo" ;;
+        *)  exit 1            ;;
+    esac
+done
+
+if [ -z $image_name ]
 	then
-	error_exit "\"image-name\" is mandatory."
+	error_exit "\"image_name\" is mandatory."
 fi
 
 
-build-cmd="$sudo docker build $build-opt -t $image-name $dockerfile-location"
-
-echo $build-cmd
-
+build-cmd="$sudo docker build $build_opt -t $image_name $dockerfile_location"
 
 eval $build-cmd
 
