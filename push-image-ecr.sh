@@ -52,8 +52,8 @@ if [ -z $ecr_url ]
 	error_exit "\"ecr_url\" is mandatory."
 fi
 
-base_tag = "$ecr_url/$image_name"
-latest_tag = "$base_tag:latest"
+base_tag="$ecr_url/$image_name"
+latest_tag="$base_tag:latest"
 date_tag="$base_tag:` date +%d%m%Y%H%M`"
 
 eval "$sudo docker tag $image_name:latest $latest_tag"
