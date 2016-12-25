@@ -26,11 +26,12 @@ $2 \n" 1>&2
 sudo=""
 image_name=""
 
-while getopts 'sa:n:' opt; do
+while getopts 'sa:n:e:' opt; do
     case $opt in
         a)  aws_credentials_arg="$OPTARG" ;;
 		s)  sudo="sudo" ;;
         n)  image_name="$OPTARG"    ;;
+		e) 	ecr_url="$OPTARG"    ;;
         *)  exit 1            ;;
     esac
 done
