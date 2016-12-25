@@ -43,9 +43,9 @@ if [ -z $image_name ]
 fi
 
 
-build-cmd="$sudo docker build $build_opt -t $image_name $dockerfile_location"
+build_cmd="$sudo docker build $build_opt -t $image_name $dockerfile_location"
 
-eval $build-cmd
+eval $build_cmd
 
 [ $? != 0 ] && \
 error "Docker image build failed !" && exit 1
