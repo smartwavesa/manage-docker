@@ -75,6 +75,6 @@ eval "$sudo docker push $latest_tag"
 
 eval "$sudo docker push $date_tag"
 
-eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $(aws ecr list-images --repository-name $image_name --filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")"
+eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $($ecr_cmd list-images --repository-name $image_name --filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")"
 
 exit 0
