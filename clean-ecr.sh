@@ -53,11 +53,13 @@ AWS_ACCESS_KEY_ID=${aws_credentials%:*}
 AWS_SECRET_ACCESS_KEY=${aws_credentials#*:}
 
 
-ecr_cmd="$sudo docker run --rm  -e AWS_ACCESS_KEY_ID=$1 -e AWS_SECRET_ACCESS_KEY=$2 -e AWS_DEFAULT_REGION=eu-west-1 anigeo/awscli ecr"
+ecr_cmd="$sudo docker run --rm  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=eu-west-1 anigeo/awscli ecr"
 
 get_image_ids="$ecr_cmd list-images --repository-name $image_name --filter tagStatus=UNTAGGED --query 'imageIds[*]'"
 
-image_Ids=`$get_image_ids`| tr -d " \t\n\r"
+image_Ids=$(eval "$get_image_ids") 
+
+image_Ids=$imageIds | tr -d " \t\n\r"
 
 if [ $image_Ids ==  '[]' ]
 	then
