@@ -4,8 +4,8 @@ set -e
 
 usage="Usage:	push-image-ecr  -s -a aws_credentials -n image_name -e ecr_url\n
 -s : to execute docker build with sudo \n
--a aws_credentials (mandatory) : to execute docker build with sudo \n
--n image_name  (mandatory) : the image's image_name \n
+-a aws_credentials (mandatory) : aws credentials to use awscli \n
+-n image_name  (mandatory) : the image's name to tag and push \n
 -e ecr_url (mandatory) : url ecr \n"
 
 
@@ -74,15 +74,5 @@ $sudo `$ecr_get_login`
 eval "$sudo docker push $latest_tag"
 
 eval "$sudo docker push $date_tag"
-
-image_Ids=$($ecr_cmd list-images --repository-name $image_name --filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
-
-if [ $image_Ids ==  '[]' ]
-	then
-	echo "No Images UNTAGGED to delete"
-else
-	echo "Images UNTAGGED to delete : $image_Ids"
-	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $image_Ids"
-fi
 
 exit 0
