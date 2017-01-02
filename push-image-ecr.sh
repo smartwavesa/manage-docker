@@ -75,6 +75,14 @@ eval "$sudo docker push $latest_tag"
 
 eval "$sudo docker push $date_tag"
 
-eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $($ecr_cmd list-images --repository-name $image_name --filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")"
+image_Ids=$($ecr_cmd list-images --repository-name $image_name --filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
+
+if [ $image_Ids ==  '[]' ]
+	then
+	echo "No Images UNTAGGED to delete"
+else
+	echo "Images UNTAGGED to delete : $image_Ids"
+	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $image_Ids"
+fi
 
 exit 0
