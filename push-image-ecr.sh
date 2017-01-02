@@ -8,7 +8,6 @@ usage="Usage:	push-image-ecr  -s -a aws_credentials -n image_name -e ecr_url\n
 -n image_name  (mandatory) : the image's name to tag and push \n
 -e ecr_url (mandatory) : url ecr \n"
 
-
 function help
 {
 	echo -e $usage

@@ -5,8 +5,7 @@ set -e
 usage="Usage:	clean-ecr  -s -a aws_credentials -n image_name -e ecr_url\n
 -s : to execute docker build with sudo \n
 -a aws_credentials (mandatory) : aws credentials to use awscli \n
--n image_name  (mandatory) : the image's name \n
--e ecr_url (mandatory) : url ecr \n"
+-n image_name  (mandatory) : the image's name \n"
 
 
 function help
@@ -26,12 +25,11 @@ $2 \n" 1>&2
 sudo=""
 image_name=""
 
-while getopts 'sa:n:e:' opt; do
+while getopts 'sa:n:' opt; do
     case $opt in
         a)  aws_credentials_arg="$OPTARG" ;;
 		s)  sudo="sudo" ;;
         n)  image_name="$OPTARG"    ;;
-		e) 	ecr_url="$OPTARG"    ;;
         *)  exit 1            ;;
     esac
 done
@@ -47,10 +45,6 @@ if [ -z $aws_credentials_arg ]
 	error_exit "\"aws_credentials\" is mandatory."
 fi
 
-if [ -z $ecr_url ]
-	then
-	error_exit "\"ecr_url\" is mandatory."
-fi
 
 
 eval aws_credentials=\$$aws_credentials_arg
@@ -70,6 +64,7 @@ if [ $image_Ids ==  '[]' ]
 	echo "No Images UNTAGGED"
 else
 	echo "Images UNTAGGED $image_Ids"
+	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $image_Ids"
 fi
 
 
