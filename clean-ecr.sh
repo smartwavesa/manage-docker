@@ -65,7 +65,7 @@ if [ $image_Ids ==  '[]' ]
 	then
 	echo "No Images UNTAGGED"
 else
-	echo "Images UNTAGGED $image_Ids"
+	echo "Images UNTAGGED"
 	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $image_Ids"
 fi
 
