@@ -45,7 +45,6 @@ if [ -z $aws_credentials_arg ]
 	error_exit "\"aws_credentials\" is mandatory."
 fi
 
-
 eval aws_credentials=\$$aws_credentials_arg
 
 AWS_ACCESS_KEY_ID=${aws_credentials%:*}
@@ -58,13 +57,14 @@ get_image_ids="$ecr_cmd list-images --repository-name $image_name --filter tagSt
 
 image_Ids=$(eval "$get_image_ids") 
 
-image_Ids=$imageIds | tr -d " \t\n\r"
+
 
 if [ "$image_Ids" =  '[]' ]
 	then
 	echo "No Images UNTAGGED"
 else
-	echo "Images UNTAGGED $image_Ids"
+	echo "Images UNTAGGED \n $image_Ids"
+	image_Ids=$(echo "${image_Ids//[$'\t\r\n ']}")
 	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $image_Ids"
 fi
 
