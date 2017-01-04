@@ -65,7 +65,7 @@ if [ "$image_Ids" =  '[]' ]
 else
 	echo "Images UNTAGGED \n $image_Ids"
 	image_Ids=$(echo "${image_Ids//[$'\t\r\n ']}")
-	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $image_Ids"
+	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids '$image_Ids'"
 fi
 
 
