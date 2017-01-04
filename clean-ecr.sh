@@ -46,7 +46,6 @@ if [ -z $aws_credentials_arg ]
 fi
 
 
-
 eval aws_credentials=\$$aws_credentials_arg
 
 AWS_ACCESS_KEY_ID=${aws_credentials%:*}
@@ -61,11 +60,11 @@ image_Ids=$(eval "$get_image_ids")
 
 image_Ids=$imageIds | tr -d " \t\n\r"
 
-if [ $image_Ids ==  '[]' ]
+if [ "$image_Ids" =  '[]' ]
 	then
 	echo "No Images UNTAGGED"
 else
-	echo "Images UNTAGGED"
+	echo "Images UNTAGGED $image_Ids"
 	eval "$ecr_cmd batch-delete-image --repository-name $image_name --image-ids $image_Ids"
 fi
 
