@@ -12,7 +12,7 @@ tag=""
 
 while getopts 'sn:t:' opt; do
     case $opt in
-        a)  image_name="$OPTARG" ;;
+        n)  image_name="$OPTARG" ;;
 		s)  sudo="sudo" ;;
         t)  tag="$OPTARG"    ;;
         *)  exit 1            ;;
