@@ -2,11 +2,12 @@
 
 set -e
 
-usage="Usage:	push-image-ecr  -s -a aws_credentials -n image_name -e ecr_url\n
+usage="Usage:	push-image-ecr  -s -a aws_credentials -n image_name -e ecr_url -t custom_tag\n
 -s : to execute docker build with sudo \n
 -a aws_credentials (mandatory) : aws credentials to use awscli \n
 -n image_name  (mandatory) : the image's name to tag and push \n
--e ecr_url (mandatory) : url ecr \n"
+-e ecr_url (mandatory) : url ecr \n
+-t custom_tag (optional) : user tag to add on ECR"
 
 function help
 {
@@ -25,12 +26,13 @@ $2 \n" 1>&2
 sudo=""
 image_name=""
 
-while getopts 'sa:n:e:' opt; do
+while getopts 'sa:n:e:t:' opt; do
     case $opt in
         a)  aws_credentials_arg="$OPTARG" ;;
 		s)  sudo="sudo" ;;
         n)  image_name="$OPTARG"    ;;
-		e) 	ecr_url="$OPTARG"    ;;
+		e) 	ecr_url="$OPTARG"    ;; 
+		t)  custom_tag="$OPTARG"    ;; 
         *)  exit 1            ;;
     esac
 done
@@ -58,6 +60,12 @@ date_tag="$base_tag:` date +%d%m%Y%H%M`"
 eval "$sudo docker tag $image_name:latest $latest_tag"
 
 eval "$sudo docker tag $image_name:latest $date_tag"
+
+if [ ! -z "$custom_tag" ]
+then
+	custom_tag="$base_tag:$custom_tag" 
+	eval "$sudo docker tag $image_name:latest $custom_tag"
+fi
 		
 eval aws_credentials=\$$aws_credentials_arg
 
