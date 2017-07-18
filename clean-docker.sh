@@ -30,7 +30,7 @@ $2 \n" 1>&2
 }
 
 
-eval "$sudo docker rm $($1 docker ps -a  -f 'status=exited' -q --no-trunc)" || true
-eval "$sudo docker rmi $($1 docker images --filter 'dangling=true' -q --no-trunc)" || true
+eval "$sudo docker rm $($sudo docker ps -a  -f 'status=exited' -q --no-trunc)" || true
+eval "$sudo docker rmi $($sudo docker images --filter 'dangling=true' -q --no-trunc)" || true
 
 exit 0
