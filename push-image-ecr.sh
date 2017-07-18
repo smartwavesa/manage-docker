@@ -82,4 +82,9 @@ eval "$sudo docker push $latest_tag"
 
 eval "$sudo docker push $date_tag"
 
+if [ ! -z "$custom_tag" ]
+then
+	eval "$sudo docker push $custom_tag"
+fi
+
 exit 0
