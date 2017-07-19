@@ -63,13 +63,11 @@ eval "$sudo  wget http://stedolan.github.io/jq/download/linux64/jq"
 eval "$sudo  chmod +x ./jq"
 eval "$sudo cp jq /usr/bin"
 		
-#eval aws_credentials=\$$aws_credentials_arg
+eval aws_credentials=\$$aws_credentials_arg
 
-#AWS_ACCESS_KEY_ID=${aws_credentials%:*}
-#AWS_SECRET_ACCESS_KEY=${aws_credentials#*:}
+AWS_ACCESS_KEY_ID=${aws_credentials%:*}
+AWS_SECRET_ACCESS_KEY=${aws_credentials#*:}
 
-AWS_ACCESS_KEY_ID=${aws_credentials_arg%:*}
-AWS_SECRET_ACCESS_KEY=${aws_credentials_arg#*:}
 
 ecs_cmd="$sudo docker run --rm  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=eu-west-1 anigeo/awscli ecs"
 
