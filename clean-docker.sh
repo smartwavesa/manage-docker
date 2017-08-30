@@ -4,11 +4,11 @@ set -e
 
 usage="Usage:	clean-docker -s \n
 -s : to execute docker build with sudo \n
--n image_name  (mandatory) : the image's name \n"
+-n image_name  (optional) : the image's name \n"
 
 sudo=""
 
-while getopts 's' opt; do
+while getopts 's:n:' opt; do
     case $opt in
 		s)  sudo="sudo" ;;
 		n)  image_name="$OPTARG"    ;;
