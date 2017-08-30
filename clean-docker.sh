@@ -7,6 +7,7 @@ usage="Usage:	clean-docker -s \n
 -n image_name  (optional) : the image's name \n"
 
 sudo=""
+image_name=""
 
 while getopts 's:n:' opt; do
     case $opt in
