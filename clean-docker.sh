@@ -36,9 +36,9 @@ eval "$sudo docker rmi $($sudo docker images --filter 'dangling=true' -q --no-tr
 
 if [ ! -z "$image_name" ]
 then
-	get_img_id_local="docker images -q $image_name"
+	get_img_id_local="$sudo docker images -q $image_name"
 	img_id_local=$(eval "$get_img_id_local")
-	eval "docker rmi -f $img_id_local"
+	eval "$sudo docker rmi -f $img_id_local"
 else
 	echo "image_name parameter is empty"
 fi
