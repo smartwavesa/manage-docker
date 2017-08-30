@@ -8,7 +8,7 @@ usage="Usage:	clean-docker -s -n image_name\n
 
 sudo=""
 
-while getopts 's:n:' opt; do
+while getopts 'sn:' opt; do
     case $opt in
 		s)  sudo="sudo" ;;
 		n)  image_name="$OPTARG"    ;;
