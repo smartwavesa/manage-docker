@@ -7,7 +7,8 @@ usage="Usage:	push-image-ecr  -s -a aws_credentials -n image_name -e ecr_url -t 
 -a aws_credentials (mandatory) : aws credentials to use awscli \n
 -n image_name  (mandatory) : the image's name to tag and push \n
 -e ecr_url (mandatory) : url ecr \n
--t custom_tag (optional) : user tag to add on ECR"
+-t custom_tag (optional) : user tag to add on ECR \n
+-d : no date tag will be added"
 
 function help
 {
@@ -26,13 +27,14 @@ $2 \n" 1>&2
 sudo=""
 image_name=""
 
-while getopts 'sa:n:e:t:' opt; do
+while getopts 'sda:n:e:t:' opt; do
     case $opt in
         a)  aws_credentials_arg="$OPTARG" ;;
 		s)  sudo="sudo" ;;
         n)  image_name="$OPTARG"    ;;
 		e) 	ecr_url="$OPTARG"    ;; 
 		t)  custom_tag="$OPTARG"    ;; 
+		d)  nodate="nodate"   ;;
         *)  exit 1            ;;
     esac
 done
@@ -59,7 +61,10 @@ date_tag="$base_tag:` date +%d%m%Y%H%M`"
 
 eval "$sudo docker tag $image_name:latest $latest_tag"
 
-eval "$sudo docker tag $image_name:latest $date_tag"
+if [ -z "$nodate" ]
+then
+	eval "$sudo docker tag $image_name:latest $date_tag"
+fi
 
 if [ ! -z "$custom_tag" ]
 then
@@ -80,7 +85,10 @@ $sudo `$ecr_get_login`
 
 eval "$sudo docker push $latest_tag"
 
-eval "$sudo docker push $date_tag"
+if [ -z "$nodate" ]
+then
+	eval "$sudo docker push $date_tag"
+fi
 
 if [ ! -z "$custom_tag" ]
 then
