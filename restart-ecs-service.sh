@@ -4,6 +4,7 @@ set -e
 
 usage="Usage: restart-ecs-services  -s -a aws_credentials -n image_name -c cluster -v service_name \n
 -s : to execute docker build with sudo \n
+-t : Stop task instead of scaling down service \n
 -a aws_credentials (mandatory) : aws credentials to use awscli \n
 -n image_name  (mandatory) : the image's name to tag and push \n
 -c cluster (mandatory) : ecs cluster \n
@@ -26,9 +27,10 @@ $2 \n" 1>&2
 sudo=""
 image_name=""
 
-while getopts 'sa:n:c:v:' opt; do
+while getopts 'sta:n:c:v:' opt; do
     case $opt in
         a)  aws_credentials_arg="$OPTARG" ;;
+		t)  stop_ecs_task="stop_ecs_task"    ;;
 		s)  sudo="sudo" ;;
         n)  image_name="$OPTARG"    ;;
 		c) 	cluster="$OPTARG"    ;; 
@@ -77,19 +79,31 @@ taskArns=`$ecs_list_tasks`| jq -r '.taskArns'
 
 echo "RUNNING TASKS on $service_name ARE : $taskArns"
 
-disable_service=`$ecs_cmd  update-service --cluster $cluster --service $service_name --desired-count 0`
+if [ ! -z "$stop_ecs_task" ]
+then
+	for task in taskArns
+	do
+		stop_task=`$ecs_cmd  stop-task --cluster $cluster --task $task`
+	done
+else
+	disable_service=`$ecs_cmd  update-service --cluster $cluster --service $service_name --desired-count 0`
+fi
 
 for task in taskArns
 do
 	task_status='RUNNING'
 	while [ "$task_status" == "RUNNING" ]
 	do
-		task_status=`$ecs_cmd describe-tasks --cluster llm-product-ecs-dev --tasks $task`| jq -r '.tasks[0].lastStatus'
+		task_status=`$ecs_cmd describe-tasks --cluster $cluster --tasks $task`| jq -r '.tasks[0].lastStatus'
 	done
 	echo "$task $task_status"
 done
 
-enable_service=`$ecs_cmd  update-service --cluster $cluster  --service $service_name --desired-count 1`
-
+if [ ! -z "$stop_ecs_task" ]
+then
+	echo "Task(s) will restart automatically."
+else
+	enable_service=`$ecs_cmd  update-service --cluster $cluster  --service $service_name --desired-count 1`
+fi
 
 exit 0
