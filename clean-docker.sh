@@ -31,7 +31,7 @@ $2 \n" 1>&2
 	exit 1
 }
 
-
+eval "echo $image_name"
 eval "$sudo docker rm $($sudo docker ps -a  -f 'status=exited' -q --no-trunc)" || true
 eval "$sudo docker rmi $($sudo docker images --filter 'dangling=true' -q --no-trunc)" || true
 if [ ! -z "$image_name" ]
