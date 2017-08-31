@@ -83,7 +83,7 @@ echo "RUNNING TASKS on $service_name ARE : $taskArns"
 for task in $taskArns
 do
 	if [[ $task == *"task"* ]]; then
-		task_clean=${task_clean:40:36}
+		task_clean=$(eval "${task_clean:40:36}")
 		echo "task: $task_clean"
 	fi
 done
@@ -93,7 +93,7 @@ then
 	for task in $taskArns
 	do
 		if [[ $task == *"task"* ]]; then
-			task_clean=${task_clean:40:36}
+			task_clean=$(eval "${task_clean:40:36}")
 			echo "task: $task_clean"
 			stop_task=`$ecs_cmd  stop-task --cluster $cluster --task $task_clean`
 		fi
