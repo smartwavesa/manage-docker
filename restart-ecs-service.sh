@@ -82,7 +82,7 @@ echo "RUNNING TASKS on $service_name ARE : $taskArns"
 
 if [ ! -z "$stop_ecs_task" ]
 then
-	for task in taskArns
+	for task in $taskArns
 	do
 		echo "task: $task"
 		stop_task=`$ecs_cmd  stop-task --cluster $cluster --task $task`
@@ -91,7 +91,7 @@ else
 	disable_service=`$ecs_cmd  update-service --cluster $cluster --service $service_name --desired-count 0`
 fi
 
-for task in taskArns
+for task in $taskArns
 do
 	task_status='RUNNING'
 	echo "task: $task"
