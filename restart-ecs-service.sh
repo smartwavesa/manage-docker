@@ -84,6 +84,7 @@ if [ ! -z "$stop_ecs_task" ]
 then
 	for task in taskArns
 	do
+		echo "task: $task"
 		stop_task=`$ecs_cmd  stop-task --cluster $cluster --task $task`
 	done
 else
