@@ -80,6 +80,11 @@ taskArns=$(eval "$ecs_list_tasks" | jq -r '.taskArns')
 
 echo "RUNNING TASKS on $service_name ARE : $taskArns"
 
+for task in $taskArns
+do
+	echo "task: $task"
+done
+
 if [ ! -z "$stop_ecs_task" ]
 then
 	for task in $taskArns
