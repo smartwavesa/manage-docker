@@ -91,20 +91,19 @@ then
 	done
 else
 	disable_service=`$ecs_cmd  update-service --cluster $cluster --service $service_name --desired-count 0`
-fi
-
-for task in $taskArns
-do
-	task_status='RUNNING'
-	while [ "$task_status" == "RUNNING" ]
+	for task in $taskArns
 	do
-		if [[ $task == *"task"* ]]; then
-			task_clean=${task:41:36}
-			task_status=`$ecs_cmd describe-tasks --cluster $cluster --tasks $task_clean`| jq -r '.tasks[0].lastStatus'
-		fi
+		task_status='RUNNING'
+		while [ "$task_status" == "RUNNING" ]
+		do
+			if [[ $task == *"task"* ]]; then
+				task_clean=${task:41:36}
+				task_status=`$ecs_cmd describe-tasks --cluster $cluster --tasks $task_clean`| jq -r '.tasks[0].lastStatus'
+			fi
+		done
+		echo "$task $task_status"
 	done
-	echo "$task $task_status"
-done
+fi
 
 if [ ! -z "$stop_ecs_task" ]
 then
