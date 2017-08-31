@@ -93,6 +93,7 @@ fi
 for task in taskArns
 do
 	task_status='RUNNING'
+	echo "task: $task"
 	while [ "$task_status" == "RUNNING" ]
 	do
 		task_status=`$ecs_cmd describe-tasks --cluster $cluster --tasks $task`| jq -r '.tasks[0].lastStatus'
