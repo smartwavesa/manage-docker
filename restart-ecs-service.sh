@@ -92,7 +92,7 @@ then
 	for task in $taskArns
 	do
 		if [[ $task == *"task"* ]]; then
-			task_clean=$(eval "$task" | cut -d'/' -f 2)
+			task_clean=echo $task | cut -d'/' -f 2
 			echo "task_clean: $task_clean"
 			stop_task=`$ecs_cmd  stop-task --cluster $cluster --task $task_clean`
 		fi
@@ -107,7 +107,7 @@ do
 	while [ "$task_status" == "RUNNING" ]
 	do
 		if [[ $task == *"task"* ]]; then
-			task_clean=$(eval "$task" | cut -d'/' -f 2)
+			task_clean=echo $task | cut -d'/' -f 2
 			echo "task_clean: $task_clean"
 			task_status=`$ecs_cmd describe-tasks --cluster $cluster --tasks $task_clean`| jq -r '.tasks[0].lastStatus'
 		fi
