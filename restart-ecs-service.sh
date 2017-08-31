@@ -75,10 +75,8 @@ ecs_cmd="$sudo docker run --rm  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_S
 
 ecs_list_tasks="$ecs_cmd list-tasks --cluster $cluster --service-name $service_name"
 
-echo "$ecs_list_tasks"
-
-#taskArns=`$ecs_list_tasks`| jq -r '.taskArns'
-taskArns=$(eval "$ecs_list_tasks" | cut -d'/' -f 2)
+taskArns=$(eval "$ecs_list_tasks" | jq -r '.taskArns')
+#taskArns=$(eval "$ecs_list_tasks" | cut -d'/' -f 2)
 
 echo "RUNNING TASKS on $service_name ARE : $taskArns"
 
