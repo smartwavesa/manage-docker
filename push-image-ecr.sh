@@ -83,14 +83,10 @@ ecr_get_login="$ecr_cmd get-login"
 
 docker_getlogin=$($ecr_get_login)
 
-echo "$docker_getlogin"
-
 exp='-e none'
 blank=''
 
 docker_getlogin="${docker_getlogin/$exp/$blank}"
-
-echo "$docker_getlogin"
 
 eval "$sudo $docker_getlogin"
 
