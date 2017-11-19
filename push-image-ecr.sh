@@ -92,7 +92,7 @@ docker_getlogin="${docker_getlogin/$exp/$blank}"
 
 echo "$docker_getlogin"
 
-eval "$docker_getlogin"
+eval "$sudo $docker_getlogin"
 
 eval "$sudo docker push $latest_tag"
 
